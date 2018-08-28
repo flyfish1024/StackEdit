@@ -52,7 +52,7 @@ header_image: /intro/pay_wechat.jpg
 ![中间页](../../../../assets/img/pay_wait.png)
 
 ### 代码示例
-支付页面为 jsp
+支付页面为 payType.jsp
 ```java
 /**
  * 微信支付
@@ -111,7 +111,7 @@ public String weiXinPay(HttpServletRequest request,Model model,HttpSession sessi
 	String ip = WebUtil.getIp(request);//获取调用者的ip
 	parameterMap.put("spbill_create_ip", ip);
 	parameterMap.put("notify_url", SysSetting.wx_notify_url);
-	parameterMap.put("trade_type", "MWEB");//这个是文档 写死的
+	parameterMap.put("trade_type", "MWEB");//官方文档 写死
 	
 	String sign = WXPayUtil.createSign(parameterMap);
 	parameterMap.put("sign", sign);
@@ -140,15 +140,119 @@ public String weiXinPay(HttpServletRequest request,Model model,HttpSession sessi
 		return "payType";//返回提交页面，提示错误信息
 	}
 }
+/**
+ * 微信的异步通知
+ * @param request
+ * @param httpServletResponse
+ * @throws IOException
+ */
+@RequestMapping("notify")
+public void wxpaySucc(HttpServletRequest request,HttpServletResponse httpServletResponse,HttpSession session){
+	InputStream inStream;
+	ByteArrayOutputStream outSteam = null;
+	Map<String, String> params = null;
+	try {
+		inStream = request.getInputStream();
+		outSteam = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int len = 0;
+		while ((len = inStream.read(buffer)) != -1) {
+			outSteam.write(buffer, 0, len);
+		}
+		String resultxml = new String(outSteam.toByteArray(), "utf-8");
+		params = new HashMap<String, String>();
+		params = WXPayUtil.doXMLParse(resultxml);
+		outSteam.close();
+		inStream.close();
+	} catch (UnsupportedEncodingException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (DocumentException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	
+	String result = "";
+	String wx_api_key = null;
+	params.put("key", wx_api_key);
+	if (!WXPayUtil.isTenpaySign(params)) {
+		// 支付失败
+		result = "<xml>"+
+				  "<return_code><![CDATA[FAIL]]></return_code>"+
+				  "<return_msg><![CDATA[OK]]></return_msg>"+
+				"</xml>";
+				
+	} else {
+		// ------------------------------
+		// 处理业务开始
+		// ------------------------------
+
+		String total_fee = params.get("total_fee");
+		
+		BigDecimal totalFee = new BigDecimal(total_fee);
+		BigDecimal totalFee_Yuan = totalFee.divide(new BigDecimal(100));
+		
+		String orderNo = params.get("out_trade_no"); //商户订单号
+		String trxId = params.get("transaction_id"); //微信订单号
+		
+		payService.notifyDoJob(orderNo, trxId, totalFee_Yuan, "微信");//执行业务操作，锁表，防止多次操作
+		//SELECT * FROM `ams_web_alipay_temp` WHERE vcOrderId = ? for UPDATE
+		
+		result = "<xml>"+
+		  "<return_code><![CDATA[SUCCESS]]></return_code>"+
+		  "<return_msg><![CDATA[OK]]></return_msg>"+
+		"</xml>";
+		
+	}
+	
+	try {
+		PrintWriter writer = httpServletResponse.getWriter();
+		writer.print(result); 
+		writer.flush();  
+		writer.close();  
+	} catch (Exception e) {
+		// TODO: handle exception
+		e.printStackTrace();
+	}
+}
+/**
+ * 微信同步回调
+ * @param request
+ * @param httpServletResponse
+ * @param session
+ * @return
+ */
+@RequestMapping("wapWXReturn")
+public String wapWXReturn(HttpServletRequest request,HttpServletResponse httpServletResponse,HttpSession session,String out_trade_no){
+	Map<String, Object> orderInfo = payService.getOrderInfo(out_trade_no);
+	String exe = orderInfo.get("nExe").toString();
+	if("1".equals(exe)){
+		return "pay_success";
+	}else{
+		return "pay_fail";
+	}
+	
+}
+
 ```
 
 ### 注意点
+
+1. 基本参数不要搞错，商户秘钥、商户号、appid、secret，否则会报sign验证失败，而且找不到问题
+2. ip地址获取
+3. 异步回调，防止业务流程执行多次
+4. 同步回调，加入用户选择页面
 
 ## APP原生支付
 
 ### 逻辑思路
 **官方时序图**
+![wechat-h5](https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_3_1.png)
 **流程理解**
+1. 
 **代码逻辑**
 
 ### 代码示例
@@ -242,5 +346,5 @@ public AppResult weChatPay(HttpServletRequest request,HttpSession session,BigDec
 ```
 ### 注意点
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MjgwOTQzNDJdfQ==
+eyJoaXN0b3J5IjpbMTM2NTA4OTkxM119
 -->
