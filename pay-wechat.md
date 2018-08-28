@@ -252,7 +252,16 @@ public String wapWXReturn(HttpServletRequest request,HttpServletResponse httpSer
 **官方时序图**
 ![wechat-h5](https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_3_1.png)
 **流程理解**
-1. 
+1. 用户进入app
+2. 选择商品，下单
+3. 确认支付，向商户后台确认订单
+4. 商户后台生成本地订单，再调用微信统一下单接口
+5. 商户后台获取微信返回数据（prepay_id）
+6. 商户后台生成新的sign，返回app
+7. app接收数据，唤起微信客户端
+8. 用户与微信app支付流程不用考虑
+9. 微信后台向商户后台发送支付结果，后台商户根据情况向微信后台返回数据
+10. 
 **代码逻辑**
 
 ### 代码示例
@@ -346,5 +355,5 @@ public AppResult weChatPay(HttpServletRequest request,HttpSession session,BigDec
 ```
 ### 注意点
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM2NTA4OTkxM119
+eyJoaXN0b3J5IjpbNjU4NDQ3OTM5XX0=
 -->
