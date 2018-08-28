@@ -1,4 +1,3 @@
-
 ---
 ---
 title: 微信支付总结
@@ -236,6 +235,179 @@ public String wapWXReturn(HttpServletRequest request,HttpServletResponse httpSer
 	}
 	
 }
+//工具类
+public class WXPayUtil {
+
+	// 请求xml组装
+	public static String getRequestXml(SortedMap<String, Object> parameters) {
+		parameters.remove("key");
+		StringBuffer sb = new StringBuffer();
+		sb.append("<xml>");
+		Set<Map.Entry<String, Object>> es = parameters.entrySet();
+		Iterator<Map.Entry<String, Object>> it = es.iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			String key = (String) entry.getKey();
+			String value = (String) entry.getValue();
+			if ("attach".equalsIgnoreCase(key) || "body".equalsIgnoreCase(key) || "sign".equalsIgnoreCase(key)) {
+				sb.append("<" + key + ">" + "<![CDATA[" + value + "]]></" + key + ">");
+			} else {
+				sb.append("<" + key + ">" + value + "</" + key + ">");
+			}
+		}
+		sb.append("</xml>");
+		return sb.toString();
+	}
+
+	// 生成签名
+	public static String createSign(SortedMap<String, Object> parameters) {
+		StringBuffer sb = new StringBuffer();
+		Set es = parameters.entrySet();
+		Iterator it = es.iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			String k = (String) entry.getKey();
+			Object v = entry.getValue();
+			if (null != v && !"".equals(v) && !"sign".equals(k) && !"key".equals(k)) {
+				sb.append(k + "=" + v + "&");
+			}
+		}
+		if(parameters.get("key") != null){
+			sb.append("key=" + parameters.get("key"));
+		}
+		String sign = WebUtil.getMD5Str(sb.toString()).toUpperCase();
+		return sign;
+	}
+
+	/**
+	 * 验证回调签名
+	 * 
+	 * @param packageParams
+	 * @param key
+	 * @param charset
+	 * @return
+	 */
+	public static boolean isTenpaySign(Map<String, String> map) {
+		String charset = "utf-8";
+		String signFromAPIResponse = map.get("sign");
+		if (signFromAPIResponse == null || signFromAPIResponse.equals("")) {
+			System.out.println("API返回的数据签名数据不存在，有可能被第三方篡改!!!");
+			return false;
+		}
+		//System.out.println("服务器回包里面的签名是:" + signFromAPIResponse);
+		// 过滤空 设置 TreeMap
+		SortedMap<String, String> packageParams = new TreeMap<>();
+		for (String parameter : map.keySet()) {
+			String parameterValue = map.get(parameter);
+			String v = "";
+			if (null != parameterValue) {
+				v = parameterValue.trim();
+			}
+			packageParams.put(parameter, v);
+		}
+
+		StringBuffer sb = new StringBuffer();
+		Set es = packageParams.entrySet();
+		Iterator it = es.iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			String k = (String) entry.getKey();
+			String v = (String) entry.getValue();
+			if (!"sign".equals(k) && null != v && !"".equals(v) && !"key".equals(k)) {
+				sb.append(k + "=" + v + "&");
+			}
+		}
+		sb.append("key=" + packageParams.get("key"));
+
+		// 将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
+		// 算出签名
+		String resultSign = "";
+		String tobesign = sb.toString();
+		if (null == charset || "".equals(charset)) {
+			resultSign = WebUtil.getMD5Str(tobesign).toUpperCase();
+		} else {
+			resultSign = WebUtil.getMD5Str(tobesign).toUpperCase();
+		}
+		String tenpaySign = ((String) packageParams.get("sign")).toUpperCase();
+		return tenpaySign.equals(resultSign);
+	}
+
+	// 请求方法
+	public static String httpsRequest(String requestUrl, String requestMethod, String outputStr) {
+		try {
+
+			URL url = new URL(requestUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
+			// 设置请求方式（GET/POST）
+			conn.setRequestMethod(requestMethod);
+			conn.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+			// 当outputStr不为null时向输出流写数据
+			if (null != outputStr) {
+				OutputStream outputStream = conn.getOutputStream();
+				// 注意编码格式
+				outputStream.write(outputStr.getBytes("UTF-8"));
+				outputStream.close();
+			}
+			// 从输入流读取返回内容
+			InputStream inputStream = conn.getInputStream();
+			InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			String str = null;
+			StringBuffer buffer = new StringBuffer();
+			while ((str = bufferedReader.readLine()) != null) {
+				buffer.append(str);
+			}
+			// 释放资源
+			bufferedReader.close();
+			inputStreamReader.close();
+			inputStream.close();
+			inputStream = null;
+			conn.disconnect();
+			return buffer.toString();
+		} catch (ConnectException ce) {
+			System.out.println("连接超时：{}" + ce);
+		} catch (Exception e) {
+			System.out.println("https请求异常：{}" + e);
+		}
+		return null;
+	}
+
+
+	// xml解析
+	public static Map doXMLParse(String strxml) throws DocumentException,IOException {
+		strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");
+
+		if (null == strxml || "".equals(strxml)) {
+			return null;
+		}
+
+		Map<String,String> m = new HashMap<String,String>();
+
+		InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));
+		SAXReader reader = new SAXReader();
+		Document doc = reader.read(in);
+		Element root = doc.getRootElement();
+		List<Element> list = root.elements();
+		Iterator<Element> it = list.iterator();
+		while (it.hasNext()) {
+			Element e = (Element) it.next();
+			String k = e.getName();
+			String v = e.getStringValue();
+			m.put(k, v);
+		}
+
+		// 关闭流
+		in.close();
+
+		return m;
+	}
+
+}
+
 
 ```
 
@@ -249,8 +421,10 @@ public String wapWXReturn(HttpServletRequest request,HttpServletResponse httpSer
 ## APP原生支付
 
 ### 逻辑思路
+
 **官方时序图**
 ![wechat-h5](https://pay.weixin.qq.com/wiki/doc/api/img/chapter8_3_1.png)
+
 **流程理解**
 1. 用户进入app
 2. 选择商品，下单
@@ -260,9 +434,26 @@ public String wapWXReturn(HttpServletRequest request,HttpServletResponse httpSer
 6. 商户后台生成新的sign，返回app
 7. app接收数据，唤起微信客户端
 8. 用户与微信app支付流程不用考虑
-9. 微信后台向商户后台发送支付结果，后台商户根据情况向微信后台返回数据
-10. 
+9. 异步回调：微信后台向商户后台发送支付结果，后台商户根据情况向微信后台返回数据
+10. 同步，微信再唤起商户app时，会返回支付状态，根据支付状态去后台查真正有效的支付状态，再展示给用户
+
 **代码逻辑**
+1. 下单（事务）
+	1.	生成本地订单
+	2.	微信统一接口下单
+		1. 拼接sign签名下单
+		2. 下单成功，生成新的sign交给app
+2.	异步回调
+	1. 解析xml
+	2. 校验sign
+		1. 返回失败
+	3.	处理本地订单
+		1. 是否已处理
+		2. 锁定记录
+		3. 处理
+3. 同步回调
+	1. App调用订单支付状态查询接口
+
 
 ### 代码示例
 ```java
@@ -348,12 +539,16 @@ public AppResult weChatPay(HttpServletRequest request,HttpSession session,BigDec
 	//3.1 生成 app签名
 	String signApp = WXPayUtil.createSign(parameters);
 	parameters.put("sign", signApp );
-	parameters.put("vcOrderNo", vcOrderNo);
+	parameters.put("vcOrderNo", vcOrderNo);//app同步回调查询支付状态使用
 	
 	return AppResult.build("本地下单成功~", 1, parameters);
 }
 ```
 ### 注意点
+
+1. 下单需要生成签名两次，每次生成签名都需要在末尾追加 key
+2. 两次签名的数据源依据官网文档补全数据，全小写
+3. 因异步回调延迟，app查询订单状态可延迟或循环查询
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjU4NDQ3OTM5XX0=
+eyJoaXN0b3J5IjpbLTIxMzgxODUwNjVdfQ==
 -->
