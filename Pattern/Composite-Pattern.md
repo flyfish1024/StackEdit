@@ -11,7 +11,7 @@ header_image: /intro/composite_pattern.jpg
 ---
 
 本篇转载自  [java设计模式之组合模式](https://www.cnblogs.com/lfxiao/p/6816026.html)
-篇幅较长，以杀毒软件设计思路为全篇线索。精彩的讲解组合模式。
+篇幅较长，以杀毒软件设计思路为全篇线索。精彩讲解组合模式。
 
 
 
@@ -631,5 +631,5 @@ class Client {
 
 Sunny软件公司欲开发一个界面控件库，界面控件分为两大类，一类是单元控件，例如按钮、文本框等，一类是容器控件，例如窗体、中间面板等，试用组合模式设计该界面控件库。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEyMDI2MDQzMV19
+eyJoaXN0b3J5IjpbMTkwOTU4NzczM119
 -->
