@@ -2,7 +2,7 @@
 ---
 title: (一)JAVA设计模式之适配器模式-Aadpter Pattern
 date: 2018-09-06 20:21:44
-abstract: 设计模式系列第一篇，介绍结构型模式-策略模式的概念，细节，案例
+abstract: 设计模式系列第一篇，介绍结构型模式-适配器模式的概念，细节，案例
 tags:
 - Pattern
 - Adapter Pattern
@@ -213,5 +213,5 @@ public class Clienter {
 ## 注意事项
 >适配器不是在详细设计时添加的，而是解决正在服役的项目的问题。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE2MTQ4MjU2NTFdfQ==
+eyJoaXN0b3J5IjpbMzE2OTE5MDk1LC0xNjE0ODI1NjUxXX0=
 -->
