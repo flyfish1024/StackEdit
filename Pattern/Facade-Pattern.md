@@ -87,7 +87,7 @@ public class Clienter {
 >外观模式的本质是：封装交互，简化调用。
 
 
-参考
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMzk3NzQxNzA3XX0=
+eyJoaXN0b3J5IjpbLTEyNTg4MjEzOTZdfQ==
 -->
