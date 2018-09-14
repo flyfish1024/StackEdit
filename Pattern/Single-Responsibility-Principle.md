@@ -1,6 +1,6 @@
 ---
 ---
-title: 设计模式原则一：单一职责原则
+title: (转)设计模式原则一：单一职责原则
 date: 2018-09-04 15:20:06
 abstract: 一个类只负责一个功能领域中的相应职责
 tags:
@@ -48,5 +48,5 @@ createChart()用于创建图表，displayChart()用于显示图表。
 ![](http://my.csdn.net/uploads/201205/05/1336147240_4896.jpg)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1OTg0MDM3NDFdfQ==
+eyJoaXN0b3J5IjpbLTM3NDk3NjU0Nl19
 -->
