@@ -1,6 +1,6 @@
 ---
 ---
-title: 设计模式原则二：开闭原则
+title: (转)设计模式原则二：开闭原则
 date: 2018-09-04 15:20:13
 abstract: 软件实体应对扩展开放，而对修改关闭
 tags:
@@ -62,5 +62,5 @@ chart.display();
 
 注意：因为xml和properties等格式的配置文件是纯文本文件，可以直接通过VI编辑器或记事本进行编辑，且无须编译，因此在软件开发中，一般不把对配置文件的修改认为是对系统源代码的修改。如果一个系统在扩展时只涉及到修改配置文件，而原有的Java代码或C#代码没有做任何修改，该系统即可认为是一个符合开闭原则的系统。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTM1ODQyMjA0NV19
+eyJoaXN0b3J5IjpbMTIxMzUxOTY4Ml19
 -->
