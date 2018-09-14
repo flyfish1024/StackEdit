@@ -1,6 +1,6 @@
 ---
 ---
-title: 设计模式原则三：里氏代换原则
+title: (转)设计模式原则三：里氏代换原则
 date: 2018-09-04 15:20:24
 abstract: 所有引用基类对象的地方能够透明地使用其子类的对象
 tags:
@@ -50,5 +50,5 @@ header_image: /intro/liskov-substitution-principle.jpg
 
 ![](http://my.csdn.net/uploads/201205/06/1336312647_8598.jpg)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNzQ4OTE2ODNdfQ==
+eyJoaXN0b3J5IjpbODY3MTEyMDA4XX0=
 -->
