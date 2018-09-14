@@ -1,6 +1,6 @@
 ---
 ---
-title: （四)JAVA设计模式之组合模式-Bridge Pattern（转载）
+title: (四)JAVA设计模式之桥接模式-Bridge Pattern（转载）
 date: 2018-09-11 20:58:00
 abstract: 设计模式系列第四篇，介绍结构型模式-桥接模式的概念，细节，案例
 tags:
@@ -343,5 +343,5 @@ class Client {
 Sunny软件公司欲开发一个数据转换工具，可以将数据库中的数据转换成多种文件格式，例如txt、xml、pdf等格式，同时该工具需要支持多种不同的数据库。试使用桥接模式对其进行设计。
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTU3NjAzMjY1MV19
+eyJoaXN0b3J5IjpbLTg3OTE3NDY0MV19
 -->
