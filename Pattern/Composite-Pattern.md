@@ -1,6 +1,6 @@
 ---
 ---
-title: （三)JAVA设计模式之组合模式-Composite Pattern（转载）
+title: (三)JAVA设计模式之组合模式-Composite Pattern（转载）
 date: 2018-09-08 20:11:22
 abstract: 设计模式系列第三篇，介绍结构型模式-组合模式的概念，细节，案例
 tags:
@@ -631,5 +631,5 @@ class Client {
 
 Sunny软件公司欲开发一个界面控件库，界面控件分为两大类，一类是单元控件，例如按钮、文本框等，一类是容器控件，例如窗体、中间面板等，试用组合模式设计该界面控件库。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTkwOTU4NzczM119
+eyJoaXN0b3J5IjpbLTkwNjY3NjE3MV19
 -->
