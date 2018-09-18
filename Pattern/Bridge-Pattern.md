@@ -10,7 +10,7 @@ header_image: /intro/bridge_pattern.jpg
 ---
 ---
 
-本篇转载自  [java设计模式之桥接模式](https://www.cnblogs.com/lfxiao/p/6815760.html)
+【作者：刘伟 [http://blog.csdn.net/lovelion](http://blog.csdn.net/lovelion)】
 
 **处理多维度变化**
 
@@ -343,5 +343,5 @@ class Client {
 Sunny软件公司欲开发一个数据转换工具，可以将数据库中的数据转换成多种文件格式，例如txt、xml、pdf等格式，同时该工具需要支持多种不同的数据库。试使用桥接模式对其进行设计。
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg3OTE3NDY0MV19
+eyJoaXN0b3J5IjpbMTk5MTc3ODczOV19
 -->
