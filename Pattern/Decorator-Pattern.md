@@ -274,106 +274,88 @@ class Client
 //抽象装饰类
 class Decorator implements Document
 {
-private Document document;
-public Decorator(Document document)
-{
-this. document = document;
-}
-public void display()
-{
-document.display();
-}
+	private Document document;
+	public Decorator(Document document)
+	{
+		this. document = document;
+	}
+	public void display()
+	{
+		document.display();
+	}
 }
 
 //具体装饰类
 class Approver extends Decorator
 {
-public Approver(Document document)
-{
-super(document);
-System.out.println("增加审批功能！");
-}
-public void approve()
-{
-System.out.println("**审批文件！");
-}
+	public Approver(Document document)
+	{
+		super(document);
+		System.out.println("增加审批功能！");
+	}
+	public void approve()
+	{
+		System.out.println("**审批文件！");
+	}
 }
 ```
 大家注意，Approver类继承了抽象装饰类Decorator的display()方法，同时新增了业务方法approve()，但这两个方法是独立的，没有任何调用关系。如果客户端需要分别调用这两个方法，代码片段如下所示：
 
-**Document doc; //使用抽象构件类型定义**
-
+```java
+Document doc; //使用抽象构件类型定义
 doc = new PurchaseRequest();
-
-**Approver newDoc; //使用具体装饰类型定义**
-
+Approver newDoc; //使用具体装饰类型定义
 newDoc = new Approver(doc);
+newDoc.display();//调用原有业务方法
+newDoc.approve();//调用新增业务方法
+```
+如果newDoc也使用Document类型来定义，将导致客户端无法调用新增业务方法approve()，因为在抽象构件类Document中没有对approve()方法的声明。也就是说，在客户端无法统一对待装饰之前的具体构件对象和装饰之后的构件对象(**多态，父类无法调用子类特有方法**)。
 
-newDoc.display();**//****调用原有业务方法**
+在实际使用过程中，由于新增行为可能需要单独调用，因此这种形式的装饰模式也经常出现，这种装饰模式被称为**半透明(Semi-transparent)装饰模式**，而标准的装饰模式是**透明(Transparent)装饰模式**。下面我们对这两种装饰模式进行较为详细的介绍：
 
-newDoc.approve();**//****调用新增业务方法**
-
-如果newDoc也使用Document类型来定义，将导致客户端无法调用新增业务方法approve()，因为在抽象构件类Document中没有对approve()方法的声明。也就是说，在客户端无法统一对待装饰之前的具体构件对象和装饰之后的构件对象。
-
-在实际使用过程中，由于新增行为可能需要单独调用，因此这种形式的装饰模式也经常出现，这种装饰模式被称为**半透明****(Semi-transparent)装饰模式**，而标准的装饰模式是**透明****(Transparent)装饰模式**。下面我们对这两种装饰模式进行较为详细的介绍：
-
-**(1)透明装饰模式**
+### 透明装饰模式
 
 在透明装饰模式中，要求客户端完全针对抽象编程，装饰模式的透明性要求客户端程序不应该将对象声明为具体构件类型或具体装饰类型，而应该全部声明为抽象构件类型。对于客户端而言，具体构件对象和具体装饰对象没有任何区别。也就是应该使用如下代码：
 
-**Component c, c1; //使用抽象构件类型定义对象**
-
+```java
+Component c, c1;//使用抽象构件类型定义对象
 c = new ConcreteComponent()；
-
 c1 = new ConcreteDecorator (c)；
 
-而不应该使用如下代码：
+//而不应该使用如下代码：
 
-**ConcreteComponent c; //使用具体构件类型定义对象**
-
+ConcreteComponent c; //使用具体构件类型定义对象
 c = new ConcreteComponent()；
-
-或
-
-**ConcreteDecorator c1; //使用具体装饰类型定义对象**
-
+//或
+ConcreteDecorator c1; //使用具体装饰类型定义对象
 c1 = new ConcreteDecorator(c)；
+```
+在第三节 图形界面构件库的设计方案中使用的就是透明装饰模式，在客户端中存在如下代码片段：
 
-在12.3节图形界面构件库的设计方案中使用的就是透明装饰模式，在客户端中存在如下代码片段：
+```java
+Component component,componentSB,componentBB; //全部使用抽象构件定义
+component = new Window();
+componentSB = new ScrollBarDecorator(component);
+componentBB = new BlackBorderDecorator(componentSB);
+componentBB.display();
 
-……
-
-**Component component,componentSB,componentBB; //全部使用抽象构件定义**
-
-**component = new Window();**
-
-**componentSB = new ScrollBarDecorator(component);**
-
-**componentBB = new BlackBorderDecorator(componentSB);**
-
-**componentBB.display();**
-
-……
+```
 
 使用抽象构件类型Component定义全部具体构件对象和具体装饰对象，客户端可以一致地使用这些对象，因此符合透明装饰模式的要求。
 
 透明装饰模式可以让客户端透明地使用装饰之前的对象和装饰之后的对象，无须关心它们的区别，此外，还可以对一个已装饰过的对象进行多次装饰，得到更为复杂、功能更为强大的对象。在实现透明装饰模式时，要求具体装饰类的operation()方法覆盖抽象装饰类的operation()方法，除了调用原有对象的operation()外还需要调用新增的addedBehavior()方法来增加新行为，
 
-**(2)半透明装饰模式**
+### 半透明装饰模式
 
 透明装饰模式的设计难度较大，而且有时我们需要单独调用新增的业务方法。为了能够调用到新增方法，我们不得不用具体装饰类型来定义装饰之后的对象，而具体构件类型还是可以使用抽象构件类型来定义，这种装饰模式即为半透明装饰模式，也就是说，对于客户端而言，具体构件类型无须关心，是透明的；但是具体装饰类型必须指定，这是不透明的。如本节前面所提到的文件对象功能增加实例，为了能够调用到在Approver中新增方法approve()，客户端代码片段如下所示：
 
-……
-
-**Document doc; //使用抽象构件类型定义**
-
+```java
+Document doc; //使用抽象构件类型定义
 doc = new PurchaseRequest();
+Approver newDoc; //使用具体装饰类型定义
+newDoc = new Approver(doc);//newDoc 可以访问到 approve()
 
-**Approver newDoc; //使用具体装饰类型定义**
-
-newDoc = new Approver(doc);
-
-……
+```
 
 半透明装饰模式可以给系统带来更多的灵活性，设计相对简单，使用起来也非常方便；但是其最大的缺点在于不能实现对同一个对象的多次装饰，而且客户端需要有区别地对待装饰之前的对象和装饰之后的对象。在实现半透明的装饰模式时，我们只需在具体装饰类中增加一个独立的addedBehavior()方法来封装相应的业务处理，由于客户端使用具体装饰类型来定义装饰后的对象，因此可以单独调用addedBehavior()方法来扩展系统功能。
 
@@ -381,7 +363,9 @@ newDoc = new Approver(doc);
 
 为什么半透明装饰模式不能实现对同一个对象的多次装饰？
 
-## 12.5 装饰模式注意事项
+>因为装饰模式的方法接收参数类型为父类型，传入子类型参数，则形成多态，此参数不能调用子类特有方法。
+
+## 装饰模式注意事项
 
 在使用装饰模式时，通常我们需要注意以下几个问题：
 
@@ -395,7 +379,7 @@ newDoc = new Approver(doc);
 
 **图12-6 没有抽象构件类的装饰模式**
 
-## 12.6 装饰模式总结
+## 装饰模式总结
 
 装饰模式降低了系统的耦合度，可以动态增加或删除对象的职责，并使得需要装饰的具体构件类和具体装饰类可以独立变化，以便增加新的具体构件类和具体装饰类。在软件开发中，装饰模式应用较为广泛，例如在JavaIO中的输入流和输出流的设计、javax.swing包中一些图形界面构件功能的增强等地方都运用了装饰模式。
 
@@ -431,7 +415,6 @@ newDoc = new Approver(doc);
 
 Sunny软件公司欲开发了一个数据加密模块，可以对字符串进行加密。最简单的加密[算法](http://lib.csdn.net/base/datastructure "算法与数据结构知识库")通过对字母进行移位来实现，同时还提供了稍复杂的逆向输出加密，还提供了更为高级的求模加密。用户先使用最简单的加密算法对字符串进行加密，如果觉得还不够可以对加密之后的结果使用其他加密算法进行二次加密，当然也可以进行第三次加密。试使用装饰模式设计该多重加密系统。
 
-【作者：刘伟 [http://blog.csdn.net/lovelion](http://blog.csdn.net/lovelion)】
 <!--stackedit_data:
 eyJkaXNjdXNzaW9ucyI6eyJ6aEF4TGVpd2tFT0FHN0gwIjp7In
 N0YXJ0IjozMjc2LCJlbmQiOjMyODAsInRleHQiOiLpgI/mmI7m
@@ -439,6 +422,6 @@ k43kvZwifX0sImNvbW1lbnRzIjp7IlltREVCcjJ5c0dXb2t4NH
 ciOnsiZGlzY3Vzc2lvbklkIjoiemhBeExlaXdrRU9BRzdIMCIs
 InN1YiI6ImdoOjM0MDU3NzYyIiwidGV4dCI6IuaOpeWPo+e7n+
 S4gO+8jOS4jeWQjOWvueixoee7n+S4gOWkhOeQhiIsImNyZWF0
-ZWQiOjE1MzcyNjI2Mjg1NDJ9fSwiaGlzdG9yeSI6WzEwNTI3Mj
-U0NTBdfQ==
+ZWQiOjE1MzcyNjI2Mjg1NDJ9fSwiaGlzdG9yeSI6WzU1OTEyMz
+cwOV19
 -->
