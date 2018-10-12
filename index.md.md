@@ -64,9 +64,9 @@ JAVA + AnglarJS + MQ + Redis
 - 编程语言：Java
 - Web框架：Spring/SpringMVC/MyBatis/Dubbo
 - 前端框架：Bootstrap/AngularJS/HTML5/EasyUI
-- 数据库相关：MySQL/Redis/MongoDB/ElasticSearch
-- 版本管理、文档和自动化部署工具：Svn/Git/showdoc/Maven/Jenkins/GoCD
-- 服务器相关：Linux/Vagrant/Shell
+- 数据库相关：MySQL/Redis/MongoDB
+- 版本管理、文档和自动化部署工具：Svn/Git/showdoc/Maven
+- 服务器相关：Linux/nginx/tomcat
 
 ### 自我评价
 - 有事业心与责任心，工作积极认真，新项目上手很快。
@@ -76,5 +76,5 @@ JAVA + AnglarJS + MQ + Redis
 ### 致谢
 感谢您花时间阅读我的简历，期待能有机会和您共事。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MzIzNTU2NjRdfQ==
+eyJoaXN0b3J5IjpbOTM4ODY2NjM2LC0xODMyMzU1NjY0XX0=
 -->
