@@ -60,10 +60,10 @@ JAVA + AnglarJS + MQ + Redis
 
 
 
-### 技能清单(朴实的罗列即可，找重点写)
+### 技能清单
 - 编程语言：Java
-- Web框架：Spring/SpringMVC/MyBatis/Dubbo
-- 前端框架：Bootstrap/AngularJS/HTML5/EasyUI
+- Web框架：Spring/SpringMVC/MyBatis/Struts2/Hibernate
+- 前端框架：Bootstrap/AngularJS/EasyUI
 - 数据库相关：MySQL/Redis/MongoDB
 - 版本管理、文档和自动化部署工具：Svn/Git/showdoc/Maven
 - 服务器相关：Linux/nginx/tomcat
@@ -76,5 +76,6 @@ JAVA + AnglarJS + MQ + Redis
 ### 致谢
 感谢您花时间阅读我的简历，期待能有机会和您共事。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbOTM4ODY2NjM2LC0xODMyMzU1NjY0XX0=
+eyJoaXN0b3J5IjpbMjA5NzA3ODc0Myw5Mzg4NjY2MzYsLTE4Mz
+IzNTU2NjRdfQ==
 -->
