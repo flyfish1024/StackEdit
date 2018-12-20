@@ -65,9 +65,10 @@ tomcat + SpringMVC + spring + MyBatis + mongodb+ MySQL
 - 对新事物有很强的好奇心，喜欢做有挑战的事情。
 - 思维发散，逻辑清晰。
 - 为人踏实乐观，善于沟通，具有很强的团队意识和协作能力。
+
 ### 致谢
 感谢您花时间阅读我的简历，期待能有机会和您共事。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY2MzE3MjI4NSw5Mzg4NjY2MzYsLTE4Mz
-IzNTU2NjRdfQ==
+eyJoaXN0b3J5IjpbLTk4NzM2MDMzNSwtNjYzMTcyMjg1LDkzOD
+g2NjYzNiwtMTgzMjM1NTY2NF19
 -->
