@@ -15,24 +15,25 @@ layout: about
 ### 个人信息
  - 王亚俊/男/1993
  - 本科/河北建筑工程学院/信息与计算科学 2012-2016 
- - 工作年限：2年以上
+ - 工作年限：3年
  - 技术博客：https://flyfish1024.github.io/
  - 期望职位：Java工程师，后端工程师
- - 期望城市：北京
+ - 期望城市：北京，天津
 
 ### 工作经历
 #### 北京中嘉信诺科技发展有限公司（2017.10 ~ 今）
 
-##### 某国家一级单位党建App（2018.03 ~ 2018.07）
+##### 某国家副部级单位党建App（2018.03 ~ 2018.07， 2018.10-2018.12）
 **项目描述:**  
-该项目主要是为党员建设提供支持，将复杂繁琐的纸面操作转为便捷简明的可视化操作，提供权限分配，文章阅读，积分管理，转组审核，机构与人员管理，数据统计，在线考试，党费缴纳等功能，为上万名党员提供人性化的服务。  
+该项目主要是为党员建设提供支持，将复杂繁琐的纸面操作转为便捷简明的可视化操作，提供系统监控，权限分配，文章阅读，积分管理，转组审核，机构与人员管理，党员发展，领导换届，数据统计，在线考试，党费缴纳等功能，为上万名党员提供人性化的服务。  
+后台模块依次为系统参数设置，发展党员管理，党员信息管理，党费管理，党建机构管理，组织关系转接，三会一课管理，党支部工作台账，文章类管理，考试管理。
 **实现技术:**  
-nginx + tomcat + SpringBoot + jodd + angularjs + MyBatis + MySQL
+nginx + tomcat + SpringBoot + Druid + jodd + angularjs + MyBatis + MySQL + IOS/Android
 **职责描述:**  
 1. 作为技术负责人，带领小组完成前端接口与后台两个项目的研发。
 2. 后台ui框架弃用easyui，启用angularjs，摸索实现数据的导入导出，机构树的展示与网格页面等。
 3. 同甲方，产品经理共同商讨需求，制定解决方案，协调app端统一开发，提升项目开发速度。
-4. 独立负责后台项目，优化数据查询速度，简化管理操作。
+4. 独立负责一期后台项目，优化数据查询速度，简化管理操作。
 
 ##### 其他项目
  - `宝慧通项目`：该项目为一款基于政务宣传、便民服务、电子商务等的智慧城镇APP，使用springmvc、mybatis、elasticsearch等技术，完成新闻、论坛、店铺，政务服务，生活缴费、监控等功能。
@@ -55,9 +56,9 @@ tomcat + SpringMVC + spring + MyBatis + mongodb+ MySQL
 ### 技能清单
 - 编程语言：Java
 - Web框架：Spring/SpringMVC/MyBatis/Struts2/Hibernate
-- 前端框架：Bootstrap/AngularJS/EasyUI
+- 前端框架：Bootstrap/AngularJS/EasyUI/vue
 - 数据库相关：MySQL/Redis/MongoDB
-- 版本管理、文档和自动化部署工具：Svn/Git/showdoc/Maven
+- 版本管理、文档和自动化部署工具：Svn/Git/showdoc/Maven/Swagger
 - 服务器相关：Linux/nginx/tomcat
 
 ### 自我评价
@@ -69,6 +70,6 @@ tomcat + SpringMVC + spring + MyBatis + mongodb+ MySQL
 ### 致谢
 感谢您花时间阅读我的简历，期待能有机会和您共事。
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTk4NzM2MDMzNSwtNjYzMTcyMjg1LDkzOD
+eyJoaXN0b3J5IjpbLTM2NDY2NzU1NCwtNjYzMTcyMjg1LDkzOD
 g2NjYzNiwtMTgzMjM1NTY2NF19
 -->
