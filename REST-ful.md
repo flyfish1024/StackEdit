@@ -16,7 +16,7 @@ header_image: /intro/RESTAPI.jpg
 * 何为REST
 	* REST架构风格的特点
 	* ROA、SOA、REST与RPC
-	* 本真REST与hybrid风格
+	* REST 成熟度模型
 * 如何REST-ful
 	-   Request 和 Response
 	-   Serialization 和 Deserialization
@@ -90,19 +90,31 @@ RESTful架构风格规定，数据的元操作，即CRUD(create, read, update和
 
 RPC风格曾是Web Service的主流，最初是基于XML-RPC协议（一个远程过程调用（remote procedure call，RPC)的分布式计算协议），后来渐渐被SOAP协议（简单对象访问协议（Simple Object Access Protocol））取代；RPC风格的服务，不仅可以用`HTTP`，还可以用`TCP`或其他通信协议。但RPC风格的服务，受开发服务采用语言的束缚比较大，如.NET框架中，开发web service的传统方式是使用WCF，基于WCF开发的服务即RPC风格的服务，使用该服务的客户端通常要用C#来实现，如果使用python或其他语言，很难实现可以直接与服务通信客户端；进入移动互联网时代后，RPC风格的服务很难在移动终端使用，而RESTful风格的服务，由于可以直接以`json`或`xml`为载体承载数据，以HTTP方法为统一接口完成数据操作，客户端的开发不依赖于服务实现的技术，移动终端也可以轻松使用服务，这也加剧了REST取代RPC成为web service的主导。
 
-RPC与RESTful的区别如下面两个图所示：
 
-![blog-post-REST-vs-RPC1](https://gevin-zone.igevin.info/blog-post-rest-RPC-service.png "blog-post-REST-vs-RPC1")
+## REST 成熟度模型
 
-![blog-post-REST-vs-RPC2](https://gevin-zone.igevin.info/blog-post-rest-RESTful-service.png "blog-post-REST-vs-RPC2")
+### 第 0 级服务：
+只使用一个 URI 作为一个服务端口，也只使用一个 HTTP 方法传输数据。大多数 WS-* 服务都是这个级别的，XML-RPC 和 POX 也是。这种做法相当于把 HTTP 这个应用层协议降级为传输层协议用。HTTP 头和有效载荷是完全隔离的，HTTP 头只用于保证传输，不涉及业务逻辑；有效载荷包含全部业务逻辑，因此 API 可以无视 HTTP 头中的任何信息。
 
-## 本真REST与hybrid风格
+### 第 1 级服务：
+使用多个 URI，不同的 URI 代表不同的调用入口，但只使用同一个 HTTP 方法传输数据。
 
-通常开发者做服务相关的客户端开发时，使用的所谓RESTful服务，基本可分为`本真REST`和`hybrid风格`两类。`本真REST`即我上文阐述的RESTful架构风格，具有上述的4个特点，是真正意义上的RESTful风格；而`hybrid风格`，只是借鉴了RESTful的一些优点，具有一部分RESTful的特点，但对外依然宣称是RESTful风格的服务。（窃以为，正是由于hybrid风格服务混淆了RESTful的概念，才在RESTful架构风格提出了本真REST的概念，以为了划分界限 :P）
+### 第 2 级服务：
+使用多个 URI，不同的 URI 代表不同的资源，同时使用多个 HTTP 方法操作这些资源，例如使用 POST/GET/PUT/DELET 分别进行 CRUD 操作。这时候 HTTP 头和有效载荷都包含业务逻辑，例如 HTTP 方法对应 CRUD 操作，HTTP 状态码对应操作结果的状态。我们现在看到的大多数所谓 RESTful API 做到的也就是这个级别。
 
-hybrid风格的最主流的用法是，使用`GET`方法获取资源，用`POST`方法实现资源的创建、修改和删除。hybrid风格之所以存在，据我了解有两种来源：一种情况是因为，某些开发者并没有真正理解何为RESTful架构风格，导致开发的服务貌合神离；而主流的原因是由于历史包袱 —— 服务本来是RPC风格的，由于上文提到的RPC的劣势及RESTful的优势，开发者在RPC风格的服务上又包装了一层RESTful的外壳，通常这层外壳只为获取资源服务，因此会按RESTful风格实现`GET`方法，如果客户端提出一些简单的创建、修改或删除数据的需求，则通过HTTP协议中最常用的`POST`方法实现相应功能。
+### 第 3 级服务：
 
-因此，开发RESTful 服务，如果没有历史包袱，不建议使用hybrid风格。
+使用超媒体（hypermedia）作为应用状态引擎。要解释这个概念先要解释什么是超媒体：
+
+我们已经知道什么是多媒体（multimedia），以及什么是超文本（hypertext）。其中超文本特有的优势是拥有超链接（hyperlink）。如果我们把超链接引入到多媒体当中去，那就得到了超媒体，因此关键角色还是超链接。使用超媒体作为应用引擎状态，意思是应用引擎的状态变更由客户端访问不同的超媒体资源驱动。
+
+举个例子来说，用户在论坛的帖子列表点击超链接进入某个帖子，这时候浏览器作为一个客户端就会去 GET 这个帖子的链接 URI，应用状态就切换为显示某个帖子了。接着用户输入回复提交表单，浏览器就会根据  `form`  上面的  `action`  属性 POST 内容给目标 URI，应用状态就再一次发生切换，完成了回复的存储。
+
+使用超媒体与前面第 1 级、第 2 级的显著区别是，客户端不再和 URI 紧耦合。在第 1 级或者第 2 级的应用里面，客户端都需要知道资源使用的 URI 模版（如  `/orders/{id}`），然后要操作什么样的资源就生成什么样的 URI。超媒体客户端只知道入口 URI，之后的每一个 URI 都是通过超链接获得的。
+
+还是用上述论坛例子来解释，假若这个论坛通过 Atom 协议支持非浏览器的客户端访问。客户端是不需要知道论坛帖子的 URI 模版的，因为客户端可以通过帖子列表的 Atom 获得帖子的超链接，然后在用户选择浏览帖子时获取对应 URI 的内容。获取回来的结果不会带有  `form`，但会带有  `<link rel="reply" />`，通过这个  `link`  客户端又知道了用户提交的回复应该发往哪个 URI。
+
+说完 Richardson 的成熟度模型，说说 REST 这篇论文作者 Roy Fielding 的回应。Roy Fielding 说「只有使用了超媒体的才能算是 REST」。简单来说，他认为第 3 级成熟度以外的都不算 REST。我个人的看法是，我支持 Roy Fielding 对 REST 的严格定义，我也认为一个真正使用了超媒体实现应用状态引擎的服务非常了不起，但是在普通 CRUD API 能满足需求的情况下我觉得使用 CRUD API 也可以。
 
 # 1. Request 和 Response
 
@@ -329,6 +341,6 @@ RESTful API 应具备良好的可读性，当url中某一个片段（segment）�
 
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE5MTk4NjUyNDgsODM5NDA4NTQyLC05ND
+eyJoaXN0b3J5IjpbLTE1NTU3NzU1NTEsODM5NDA4NTQyLC05ND
 Y5ODE1MDVdfQ==
 -->
